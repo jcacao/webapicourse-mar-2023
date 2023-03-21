@@ -4,6 +4,16 @@ namespace EmployeesApi.Controllers;
 
 public class EmployeesController : ControllerBase
 {
+
+    private readonly ILookupEmployees _employeeLookupService;
+
+    public EmployeesController(ILookupEmployees employeeLookupService)
+    {
+        _employeeLookupService = employeeLookupService;
+    }
+
+
+
     // GET /employees
     // make URIs CASE SENSITIVE - always do them the same way.
     [HttpGet("/employees")]
@@ -11,21 +21,21 @@ public class EmployeesController : ControllerBase
     {
         var response = new EmployeeSummaryResponse(18, 10, 8, dept);
         return Ok(response); // 200 Ok, but serialize this .NET object to client.
-        
+
     }
 
     [HttpGet("/employees/{employeeId}")]
-    public async Task<ActionResult<EmployeeResponse>> GetEmployeeById([FromRoute]string employeeId)
+    public async Task<ActionResult<EmployeeResponse>> GetEmployeeById([FromRoute] string employeeId)
     {
-        if(int.Parse(employeeId) % 2 == 0)
-        {
-            var response = new EmployeeResponse(employeeId, "Bob", "Smith", "DEV");
-            return Ok(response);
-        } else
+        EmployeeResponse? response =await  _employeeLookupService.GetEmployeeByIdAsync(employeeId);
+        
+        if(response is null)
         {
             return NotFound();
+        } else
+        {
+            return Ok(response);
         }
-        // 200 Ok with that employee
-        // 404
+
     }
 }

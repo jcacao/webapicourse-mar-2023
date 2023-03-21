@@ -5,9 +5,9 @@ namespace EmployeesApi.Controllers;
 public class DepartmentsController : ControllerBase
 {
 
-    private readonly DepartmentsLookup _departmentLookup;
+    private readonly ILookupDepartments _departmentLookup;
 
-    public DepartmentsController(DepartmentsLookup departmentLookup)
+    public DepartmentsController(ILookupDepartments departmentLookup)
     {
         _departmentLookup = departmentLookup;
     }
@@ -15,6 +15,7 @@ public class DepartmentsController : ControllerBase
     [HttpGet("/departments")]
     public async Task<ActionResult> GetAllDepartments()
     {
+       
         var data = await _departmentLookup.GetDepartmentsAsync();
         var response = new SharedCollectionResponse<DepartmentItem>() { Data = data };
         return Ok(response);

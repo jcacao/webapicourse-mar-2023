@@ -1,18 +1,29 @@
-﻿namespace EmployeesApi.Domain;
+﻿using Microsoft.EntityFrameworkCore;
 
-public class DepartmentsLookup
+namespace EmployeesApi.Domain;
+
+public class DepartmentsLookup : ILookupDepartments
 {
+    private readonly EmployeesDataContext _context;
+
+    public DepartmentsLookup(EmployeesDataContext context)
+    {
+        _context = context;
+    }
 
     public async Task<List<DepartmentItem>> GetDepartmentsAsync()
     {
-        // TODO: Tomorrow, this will get data from out database.
+        // Never use .Result! Always use the Async version of methods, and await them.
 
-        return new List<DepartmentItem>
-       {
-           new DepartmentItem("DEV", "Developers"),
-           new DepartmentItem("QA", "Quality Assurance Analysts"),
-           new DepartmentItem("SALES", "Sales Engineers")
-       };
+        var response = await _context.Departments
+                .Where(dept => dept.Code != "sales")
+                .OrderBy(dept => dept.Code)
+              .Select(dept => new DepartmentItem(dept.Code, dept.Description))
+              
+              .ToListAsync();
+
+
+        return response;
 
     }
 }
