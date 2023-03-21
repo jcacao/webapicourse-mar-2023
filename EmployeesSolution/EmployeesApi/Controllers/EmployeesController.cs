@@ -16,14 +16,14 @@ public class EmployeesController : ControllerBase
     [HttpGet("/employees/{employeeId}")]
     public async Task<ActionResult<EmployeeResponse>> GetEmployeeById([FromRoute] string employeeId)
     {
-        if (int.Parse(employeeId) % 2 == 0)
+        EmployeeResponse? response = _employeeLookupService.GetEmployeeByIdAsync(employeeId);
+        if (response is null)
         {
-            var response = new EmployeeResponse(employeeId, "Bob", "Smith", "DEV");
-            return Ok(response);
+            return NotFound();
         }
         else
         {
-            return NotFound();
+            return Ok(response);
         }
         // 200 Ok with that employee
         // 404

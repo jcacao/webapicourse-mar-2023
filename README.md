@@ -12,3 +12,17 @@ You can periodically pull the instructor's code into your repo (for reference, c
 - Follow the instructions for [syncing your repository](./instructor/notes/00-syncing.md).
 
 We started class. 
+
+Notes: 
+
+Entity Framework
+================
+
+Commands to work with migration
+
+[12:19 PM] Jeff Gonzalez
+add-migration "Initial"
+
+[12:23 PM] Jeff Gonzalez
+update-database
+

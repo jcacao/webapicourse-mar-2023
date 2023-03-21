@@ -1,5 +1,6 @@
-
+using EmployeesApi.Adapaters;
 using EmployeesApi.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeesApi
 {
@@ -16,6 +17,22 @@ namespace EmployeesApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<DepartmentsLookup>();
+            var sqlConnectionString = builder.Configuration.GetConnectionString("employees");
+            Console.WriteLine("Using this connection string " + sqlConnectionString);
+            if (sqlConnectionString == null)
+            {
+                throw new Exception("don't start this api! Cannot connect to a database");
+            }
+
+            builder.Services.AddDbContext<EmployeesDataContext>(options =>
+            {
+                options.UseSqlServer(sqlConnectionString);
+            });
+
+            builder.Services.AddDbContext<EmployeesDataContext>(options =>
+            {
+                options.UseSqlServer("connection string here");
+            });
 
             var app = builder.Build();
 
