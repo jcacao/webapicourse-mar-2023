@@ -26,3 +26,5 @@ add-migration "Initial"
 [12:23 PM] Jeff Gonzalez
 update-database
 
+================================
+Jimmy Bogard (Automapper) Check him out
