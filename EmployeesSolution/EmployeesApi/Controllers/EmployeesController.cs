@@ -38,4 +38,11 @@ public class EmployeesController : ControllerBase
             return Ok(response);
         }
     }
+
+    [HttpGet("/employees/{employeeId}/contact-information/home")]
+    public async Task<ActionResult<ContactItem>> GetEmployeeHomeContactInfo(string employeeId)
+    {
+        ContactItem? response = await _employeeLookupService.GetEmployeeContactInfoForHomeAsync(employeeId); return Ok(response);
+    }
+
 }

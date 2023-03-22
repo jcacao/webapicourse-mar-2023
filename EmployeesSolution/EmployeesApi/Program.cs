@@ -1,3 +1,5 @@
+using AutoMapper;
+using EmployeesApi.AutomapperProfiles;
 using EmployeesApi.Adapters;
 using EmployeesApi.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +40,18 @@ namespace EmployeesApi
             {
                 options.UseSqlServer(sqlConnectionString);
             });
-            
+
+            var mapperConfig = new MapperConfiguration(options =>
+            {
+                options.AddProfile<Departments>();
+                options.AddProfile<Employees>();
+            });
+
+            var mapper = mapperConfig.CreateMapper();
+
+            builder.Services.AddSingleton<MapperConfiguration>(mapperConfig);
+            builder.Services.AddSingleton<IMapper>(mapper);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
