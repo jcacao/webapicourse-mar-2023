@@ -30,3 +30,59 @@ update-database
 Jimmy Bogard (Automapper) Check him out
 
 script-migration -> Give to DBA to create the tables
+
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [Departments] (
+    [Id] int NOT NULL IDENTITY,
+    [Code] nvarchar(5) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Departments] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [Employees] (
+    [Id] int NOT NULL IDENTITY,
+    [FirstName] nvarchar(max) NOT NULL,
+    [LastName] nvarchar(max) NOT NULL,
+    [Department] nvarchar(max) NOT NULL,
+    [HomePhone] nvarchar(max) NOT NULL,
+    [HomeEmail] nvarchar(max) NOT NULL,
+    [WorkPhone] nvarchar(max) NOT NULL,
+    [WorkEmail] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Employees] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [HiringRequests] (
+    [Id] int NOT NULL IDENTITY,
+    [FirstName] nvarchar(max) NOT NULL,
+    [LastName] nvarchar(max) NOT NULL,
+    [Note] nvarchar(max) NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [ProposedSalary] decimal(18,2) NOT NULL,
+    [Status] int NOT NULL,
+    CONSTRAINT [PK_HiringRequests] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE UNIQUE INDEX [IX_Departments_Code] ON [Departments] ([Code]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230322204824_HiringRequestFinal', N'7.0.4');
+GO
+
+COMMIT;
+GO

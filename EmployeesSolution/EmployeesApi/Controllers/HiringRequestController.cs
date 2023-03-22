@@ -11,6 +11,9 @@ public class HiringRequestController : ControllerBase
         _context = context;
     }
 
+    //only the hiring manager can do this.
+
+
     [HttpPost("/hiring-requests")]
     public async Task<ActionResult> AddHiringRequest([FromBody] HiringRequestCreate request)
     {
