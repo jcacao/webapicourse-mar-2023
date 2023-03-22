@@ -1,5 +1,7 @@
 
 
+using AutoMapper;
+using EmployeesApi.AutomapperProfiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeesApi
@@ -42,8 +44,18 @@ namespace EmployeesApi
                 // 1 scoped service for the Data Context
 
                 options.UseSqlServer(sqlConnectionString);
-            }); 
+            });
 
+            var mapperConfig = new MapperConfiguration(options =>
+            {
+                options.AddProfile<Departments>();
+               options.AddProfile<Employees>();
+            });
+
+            var mapper = mapperConfig.CreateMapper();
+
+            builder.Services.AddSingleton<MapperConfiguration>(mapperConfig); // this has the stuff for the IQueryable (the thing turns our code into SQL)
+            builder.Services.AddSingleton<IMapper>(mapper); // a utility that can "Map" stuff for us.
             var app = builder.Build();
             
             // Startup Configure
