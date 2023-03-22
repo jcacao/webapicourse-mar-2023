@@ -10,6 +10,8 @@ public class EmployeeEntity
     public string HomeEmail { get; set;} = string.Empty;    
     public string WorkPhone { get; set;} = string.Empty;    
     public string WorkEmail { get; set; } = string.Empty;
+
+  
 }
 
 

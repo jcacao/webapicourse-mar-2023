@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace EmployeesApi.Controllers;
 
 public class EmployeesController : ControllerBase
@@ -12,8 +14,27 @@ public class EmployeesController : ControllerBase
         _employeeLookupService = employeeLookupService;
     }
 
+    // GET /employees/{employeeId}/contact-information
 
 
+    // GET /employees/{employeeId}/contact-information/home
+    [HttpGet("/employees/{employeeId}/contact-information/home")]
+    public async Task<ActionResult<ContactItem>> GetEmployeeHomeContactInfo(string employeeId)
+    {
+        ContactItem? response = await _employeeLookupService.GetEmployeeContactInfoForHomeAsync(employeeId);
+
+        return response is null ? NotFound() : Ok(response);
+    }
+    // GET /employees/{employeeId}/contact-information/work
+    [HttpGet("/employees/{employeeId}/contact-information/work")]
+    public async Task<ActionResult<ContactItem>> GetEmployeeWorkContactInfo(string employeeId)
+    {
+        
+
+        ContactItem? response = await _employeeLookupService.GetEmployeeContactInfoForWorkAsync(employeeId);
+
+        return response is null ? NotFound() : Ok(response);
+    }
     // GET /employees
     // make URIs CASE SENSITIVE - always do them the same way.
     [HttpGet("/employees")]

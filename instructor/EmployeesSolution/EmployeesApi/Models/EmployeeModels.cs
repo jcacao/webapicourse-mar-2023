@@ -11,11 +11,28 @@
 
 public record EmployeeSummaryResponse(int Total, int FullTime, int PartTime, string DepartmentFilter);
 
-public record EmployeeResponse(string Id, NameInformation NameInformation, WorkDetails WorkDetails, Dictionary<string, Dictionary<string,string>> ContactInformation);
+public record EmployeeResponse
+{
+	public string EmployeeId { get; init; } = string.Empty;
+	public NameInformation NameInformation { get; init; } = new();
+	public WorkDetails WorkDetails { get; init; } = new();
+	
+}
 
-public record NameInformation(string FirstName, string LastName);
+public record NameInformation
+{
+	public string FirstName { get; init; } = string.Empty;
+	public string LastName { get; init; } = string.Empty;
+}
 
-public record WorkDetails(string Department);
+public record WorkDetails
+{
+	public string Department { get; init; } = string.Empty;
+}
 
-
+public record ContactItem
+{
+	public string Email { get; init; } = string.Empty;
+	public string Phone { get; init; } = string.Empty;
+}
 
