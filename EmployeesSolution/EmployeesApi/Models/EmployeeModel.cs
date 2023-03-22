@@ -1,4 +1,7 @@
-﻿namespace EmployeesApi.Models;
+﻿
+using System.ComponentModel.DataAnnotations;
+
+namespace EmployeesApi.Models;
 
 /*
     {
@@ -32,7 +35,15 @@ public record WorkDetails
 
 public record ContactItem
 {
+
+    [EmailAddress]
     public string Email { get; init; } = string.Empty;
+
+    [Required, MaxLength(200), MinLength(8)]
     public string Phone { get; init; } = string.Empty;
 }
+
+public record WorkContactItem : ContactItem; 
+public record HomeContactItem : ContactItem;
+
 

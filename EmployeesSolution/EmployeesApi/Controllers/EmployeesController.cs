@@ -1,18 +1,39 @@
 ﻿
 //using EmployeesApi.Controllers.Domain;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace EmployeesApi.Controllers;
 
 public class EmployeesController : ControllerBase
 {
 
     private readonly ILookupEmployees _employeeLookupService;
+    private readonly IManageEmployees _employeeManager;
 
-    public EmployeesController(ILookupEmployees employeeLookupService)
+    public EmployeesController(ILookupEmployees employeeLookupService, IManageEmployees employeeManager)
     {
         _employeeLookupService = employeeLookupService;
+        _employeeManager = employeeManager;
     }
 
+    // PUT
+    //[Authorize] making use user is authorized
+    [HttpPut("/employees/{employeeId}/contact-information/home")]
+    public async Task<ActionResult> UpdateHomeContactInformation([FromRoute] string employeeId, [FromBody] HomeContactItem contactItem)
+    {
+        //TODO : AUth
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        // Make sure it passed the validation first.
+        bool foundAndUpated = await _employeeManager.UpdateContactInfoAsync(employeeId, contactItem);
+        return foundAndUpated ? Ok(contactItem) : NotFound();
+
+        //return Ok();
+    }
 
 
     // GET / employees
