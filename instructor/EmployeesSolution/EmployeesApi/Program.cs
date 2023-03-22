@@ -2,7 +2,9 @@
 
 using AutoMapper;
 using EmployeesApi.AutomapperProfiles;
+using EmployeesApi.Controllers.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace EmployeesApi
 {
@@ -14,13 +16,17 @@ namespace EmployeesApi
 
             // Add services to the container.
             // Startup ConfigureServices
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             //builder.Services.AddScoped<DepartmentsLookup>();
             builder.Services.AddScoped<ILookupDepartments, DepartmentsLookup>();
             builder.Services.AddScoped<ILookupEmployees, EntityFrameworkEmployeeLookup>();
+            builder.Services.AddScoped<IManageEmployees, EntityFrameworkEmployeeLookup>();
 
             var sqlConnectionString = builder.Configuration.GetConnectionString("employees");
             Console.WriteLine("Using this connection string " + sqlConnectionString);
