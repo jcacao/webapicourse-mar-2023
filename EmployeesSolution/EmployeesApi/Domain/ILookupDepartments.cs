@@ -1,7 +1,6 @@
-﻿namespace EmployeesApi.Domain
+﻿namespace EmployeesApi.Domain;
+
+public interface ILookupDepartments
 {
-    public interface ILookupDepartments
-    {
-        Task<List<DepartmentItem>> GetDepartmentsAsync();
-    }
+    Task<List<DepartmentItem>> GetDepartmentsAsync();
 }

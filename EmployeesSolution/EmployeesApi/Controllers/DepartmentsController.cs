@@ -1,23 +1,23 @@
-﻿namespace EmployeesApi.Controllers
+﻿using EmployeesApi.Domain;
+
+namespace EmployeesApi.Controllers;
+
+public class DepartmentsController : ControllerBase
 {
-    public class DepartmentsController : ControllerBase
+    private readonly ILookupDepartments _departmentLookup;
+
+    public DepartmentsController(ILookupDepartments departmentsLookup)
     {
-        private readonly DepartmentsLookup _departmentLookup;
+        _departmentLookup = departmentsLookup;
+    }
 
-        public DepartmentsController(DepartmentsLookup departmentsLookup)
-        {
-            _departmentLookup = departmentsLookup;
-        }
-
-        
-        [HttpGet("/departments")]
-        public async Task<ActionResult <SharedCollectionResponse<DepartmentItem>>> GetAllDepartments()
-        //public async Task<ActionResult> GetAllDepartments()
-        {
-            //var service = new DepartmentsLookup(); //DON'T DO THIS
-            var data  = await _departmentLookup.GetDepartmentsAsync();
-            var response = new SharedCollectionResponse<DepartmentItem>() { Data = data };
-            return Ok(response);
-        }
+    
+    [HttpGet("/departments")]
+    public async Task<ActionResult> GetAllDepartments()
+    {
+        //var service = new DepartmentsLookup(); //DON'T DO THIS
+        var data  = await _departmentLookup.GetDepartmentsAsync();
+        var response = new SharedCollectionResponse<DepartmentItem>() { Data = data };
+        return Ok(response);
     }
 }

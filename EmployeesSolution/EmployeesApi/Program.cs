@@ -1,4 +1,4 @@
-using EmployeesApi.Adapaters;
+using EmployeesApi.Adapters;
 using EmployeesApi.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,16 +24,20 @@ namespace EmployeesApi
                 throw new Exception("don't start this api! Cannot connect to a database");
             }
 
+            // Typed or Named Client
+            // - 
+            builder.Services.AddHttpClient<EmployeeHiredApiAdapter>(client =>
+            {
+                // Singleton service for the HttpClient
+                // But  the message handler is scoped.
+                client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("employee-api")!);
+            });
+
             builder.Services.AddDbContext<EmployeesDataContext>(options =>
             {
                 options.UseSqlServer(sqlConnectionString);
             });
-
-            builder.Services.AddDbContext<EmployeesDataContext>(options =>
-            {
-                options.UseSqlServer("connection string here");
-            });
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

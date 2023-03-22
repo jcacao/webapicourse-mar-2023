@@ -1,4 +1,4 @@
-﻿using EmployeesApi.Adapaters;
+﻿using EmployeesApi.Adapters;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeesApi.Domain
@@ -15,8 +15,11 @@ namespace EmployeesApi.Domain
         public async Task<List<DepartmentItem>> GetDepartmentsAsync()
         {
             var response = await _context.Departments
+                    .Where(dept => dept.Code != "sales")
+                    .OrderBy(dept => dept.Code)
                 .Select(dept => new DepartmentItem(dept.Code, dept.Description))
                 .ToListAsync();
+
             return response;
         }
     }

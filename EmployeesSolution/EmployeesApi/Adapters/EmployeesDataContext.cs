@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore; 
-    namespace EmployeesApi.Adapaters; public class EmployeesDataContext : DbContext
+namespace EmployeesApi.Adapters; 
+public class EmployeesDataContext : DbContext
 {
     public EmployeesDataContext(DbContextOptions<EmployeesDataContext> options) : base(options)
     {
