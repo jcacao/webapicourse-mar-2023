@@ -1,5 +1,6 @@
 ﻿
 
+using EmployeesApi.Controllers.Domain;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeesApi.Controllers;
@@ -8,14 +9,34 @@ public class EmployeesController : ControllerBase
 {
 
     private readonly ILookupEmployees _employeeLookupService;
+    private readonly IManageEmployees _employeeManager;
 
-    public EmployeesController(ILookupEmployees employeeLookupService)
+    public EmployeesController(ILookupEmployees employeeLookupService, IManageEmployees employeeManager)
     {
         _employeeLookupService = employeeLookupService;
+        _employeeManager = employeeManager;
+    }
+
+
+
+
+    // PUT /employees/1/contact-information/home
+    [HttpPut("/employees/{employeeId}/contact-information/home")]
+    public async Task<ActionResult> UpdateHomeContactInformation([FromRoute] string employeeId, [FromBody] HomeContactItem contactItem)
+    {
+        // TODO: Authn 
+        
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState);
+        }
+        // Make sure it passed the validation first.
+      
+        bool foundAndUpated = await _employeeManager.UpdateContactInfoAsync(employeeId, contactItem);
+        return foundAndUpated ? Ok(contactItem) : NotFound();
     }
 
     // GET /employees/{employeeId}/contact-information
-
+    // TODO: Your Homework
 
     // GET /employees/{employeeId}/contact-information/home
     [HttpGet("/employees/{employeeId}/contact-information/home")]

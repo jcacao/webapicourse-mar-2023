@@ -20,4 +20,6 @@ public class DepartmentsController : ControllerBase
         var response = new SharedCollectionResponse<DepartmentItem>() { Data = data };
         return Ok(response);
     }
+
+    
 }
