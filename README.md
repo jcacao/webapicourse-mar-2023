@@ -28,3 +28,5 @@ update-database
 
 ================================
 Jimmy Bogard (Automapper) Check him out
+
+script-migration -> Give to DBA to create the tables
