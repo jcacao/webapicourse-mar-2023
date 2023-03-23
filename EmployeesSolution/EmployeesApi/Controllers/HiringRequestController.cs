@@ -12,9 +12,35 @@ public class HiringRequestController : ControllerBase
     }
 
     //only the hiring manager can do this.
+    [HttpPost("/departments/{department}/employees")]
+    public async Task<ActionResult> HireEmployee([FromBody] HiringRequestEntity request, [FromRoute] string department)
+    {
+        var storedRequest = await _context.HiringRequests.SingleOrDefaultAsync(r => r.Id == request.Id && request.Status == HiringRequestStatus.PendingDepartment);
+        var storedDepartment = await _context.Departments.SingleOrDefaultAsync(d => d.Code == department);
+
+        if (storedRequest == null || storedDepartment == null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            var newEmployee = new EmployeeEntity
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Department = department,
+
+            };
+            storedRequest.Status = HiringRequestStatus.Approved;
+            _context.Employees.Add(newEmployee);
+            await _context.SaveChangesAsync();
+            return NoContent(); // or the employee, or whatever.
+        }
+    }
 
 
     [HttpPost("/hiring-requests")]
+    [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 10)]
     public async Task<ActionResult> AddHiringRequest([FromBody] HiringRequestCreate request)
     {
         if (!ModelState.IsValid)
